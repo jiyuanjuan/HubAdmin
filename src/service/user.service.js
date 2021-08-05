@@ -2,9 +2,16 @@ const connections = require('../app/database')
 
 class UserService{
     async create(user) {
+        const { name, password } = user
         const statment = `INSERT INTO users (name, password) VALUES (?,?)`
-        connections.query(statment, ['lilei',123321])
-        return "用户创建成功"
+        const result = await connections.execute(statment, [name, password])
+        return result[0]
+    }
+
+    async getUserByName(name) {
+        const statement = `SELECT * FROM users WHERE name = ?`
+        const result = await connections.execute(statement, [name])
+        return result[0]
     }
 }
 
