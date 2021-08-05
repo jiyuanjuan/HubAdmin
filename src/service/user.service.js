@@ -1,9 +1,10 @@
-const userRouter = require("../router/user.router");
+const connections = require('../app/database')
 
 class UserService{
     async create(user) {
-        
-        return "yonghu"
+        const statment = `INSERT INTO users (name, password) VALUES (?,?)`
+        connections.query(statment, ['lilei',123321])
+        return "用户创建成功"
     }
 }
 
