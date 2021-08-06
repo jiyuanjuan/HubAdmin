@@ -11,6 +11,10 @@ const errorHandle = (error, ctx) => {
             status = 409;    //conflict 用户名冲突
             message = '用户名不能重复'
             break;
+        case errorType.USER_DOES_NOT_EXISTS:
+            status = 400;    //conflict 用户名不存在
+            message = '用户名不存在'
+            break;
         default:
             status = 404;
             message = '没有找到'

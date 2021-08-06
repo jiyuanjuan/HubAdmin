@@ -6,10 +6,11 @@ const {
 } = require('../controller/user.controller')
 
 const {
-    verifyUser
+    verifyUser,
+    handlePassword
 } = require('../middleware/user.middleware')
 
-userRouter.post('/', verifyUser, create)
+userRouter.post('/', verifyUser, handlePassword, create)
 
 
 module.exports = userRouter
