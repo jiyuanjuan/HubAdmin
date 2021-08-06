@@ -4,7 +4,7 @@ const errorHandle = (error, ctx) => {
     let status, message;
     switch (error.message) {
         case errorType.NAME_OR_PASSWORD_IS_REQUIRE:
-            status = 400;    //bad Request
+            status = 400;    //bad Request，参数错误
             message = '用户名或密码不能为空'
             break;
         case errorType.USER_IS_EXISTS:
@@ -14,6 +14,10 @@ const errorHandle = (error, ctx) => {
         case errorType.USER_DOES_NOT_EXISTS:
             status = 400;    //conflict 用户名不存在
             message = '用户名不存在'
+            break;
+        case errorType.PASSWORD_IS_INCRORECT:
+            status = 400;    //密码不正确
+            message = '密码不正确'
             break;
         default:
             status = 404;
