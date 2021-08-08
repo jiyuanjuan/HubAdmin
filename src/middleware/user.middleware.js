@@ -20,7 +20,7 @@ const verifyUser = async (ctx, next) => {
 }
 
 const handlePassword = async (ctx, next) => {
-    let { password } = ctx.request.body;
+    let { name, password } = ctx.request.body;
     ctx.request.body.password = md5password(password)
     await next()
 }

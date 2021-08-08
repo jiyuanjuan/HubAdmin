@@ -15,7 +15,6 @@ app.use(bodyParser())
 // app.use(authRouter.allowedMethods())
 app.userRouter = userRouter
 app.userRouter()
-
 app.on('error', errorHandle)
 
 module.exports = app
