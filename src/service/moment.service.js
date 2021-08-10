@@ -40,6 +40,12 @@ class momentServe {
         const [result] = await connections.execute(statement, [content, momentId])
         return result
     }
+
+    async removeMoment(momentId) {
+        const statement = `DELETE FROM moment WHERE id = ? `
+        const [result] = await connections.execute(statement, [momentId])
+        return result
+    }
 }
 
 module.exports = new momentServe
