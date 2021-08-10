@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
 
 const errorType = require('../constants/error-types')
-const connections = require('../service/user.service')
+const userService = require('../service/user.service')
+const authService = require('../service/auth.service')
 const md5password = require('../utile/password-handle')
 const { PUBLIC_KEY } = require('../app/config')
 const { UNAUTHORIZATION } = require('../constants/error-types')
@@ -13,7 +14,7 @@ const verifyPassword = async (ctx, next) => {
         const error = new Error(errorType.NAME_OR_PASSWORD_IS_REQUIRE)
         return ctx.app.emit('error', error, ctx)
     }
-    const result = await connections.getUserByName(name)
+    const result = await userService.getUserByName(name)
     const user = result[0]
 
     //用户不存在
@@ -33,7 +34,7 @@ const verifyPassword = async (ctx, next) => {
 
 const verifyAuth = async (ctx, next) => {
     const authorization = ctx.headers.authorization;
-    if(!authorization) {
+    if (!authorization) {
         const error = new Error(UNAUTHORIZATION);
         ctx.app.emit('error', error, ctx)
         return
@@ -43,16 +44,31 @@ const verifyAuth = async (ctx, next) => {
         const result = await jwt.verify(token, PUBLIC_KEY, {
             algorithms: ['RS256']
         })
+        //验证成功后，把用户信息传入ctx.user方便之后使用
         ctx.user = result;
         await next()
     } catch (err) {
-        console.log(12);
         const error = new Error(UNAUTHORIZATION)
         ctx.app.emit('error', error, ctx)
     }
 }
 
+const verifyPermission = async (ctx, next) => {
+    const { id } = ctx.user
+    const { momentId } = ctx.params
+    try {
+        const isPerimission = await authService.checkPatch(momentId, id)
+        if(!isPerimission) throw new Error('无效的perimisson')
+        next()
+    } catch (err) {
+        const error = new Error(errorType.UNAUTHPERIMISSION)
+        ctx.app.emit('error', error, ctx) 
+    }
+
+}
+
 module.exports = {
     verifyPassword,
-    verifyAuth
+    verifyAuth,
+    verifyPermission
 }

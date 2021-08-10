@@ -16,12 +16,16 @@ const errorHandle = (error, ctx) => {
             message = '用户名不存在'
             break;
         case errorType.PASSWORD_IS_INCRORECT:
-            status = 400;  
+            status = 400;
             message = '密码不正确'
             break;
         case errorType.UNAUTHORIZATION:
-            status = 401;  
+            status = 401;
             message = '无效token'
+            break;
+        case errorType.UNAUTHPERIMISSION:
+            status = 401;
+            message = '无效perimission'
             break;
         default:
             status = 404;
