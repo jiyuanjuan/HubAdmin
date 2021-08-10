@@ -32,13 +32,21 @@ const verifyPassword = async (ctx, next) => {
 }
 
 const verifyAuth = async (ctx, next) => {
-    const token = ctx.headers.authorization.replace('Bearer ', '');
+    const authorization = ctx.headers.authorization;
+    if(!authorization) {
+        const error = new Error(UNAUTHORIZATION);
+        ctx.app.emit('error', error, ctx)
+        return
+    }
+    const token = authorization.replace('Bearer ', '');   //验证token
     try {
         const result = await jwt.verify(token, PUBLIC_KEY, {
             algorithms: ['RS256']
         })
+        ctx.user = result;
         await next()
     } catch (err) {
+        console.log(12);
         const error = new Error(UNAUTHORIZATION)
         ctx.app.emit('error', error, ctx)
     }
