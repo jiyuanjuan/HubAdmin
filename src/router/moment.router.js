@@ -17,7 +17,7 @@ const {
 momentRouter.post('/', verifyAuth, create)
 momentRouter.get('/:momentId', detail)
 momentRouter.get('/', detailAll)
-momentRouter.patch('/:momentId', verifyAuth, verifyPermission, update)
-momentRouter.delete('/:momentId', verifyAuth, verifyPermission, remove)
+momentRouter.patch('/:momentId', verifyAuth, verifyPermission('moment'), update)
+momentRouter.delete('/:momentId', verifyAuth, verifyPermission('moment'), remove)
 
 module.exports = momentRouter

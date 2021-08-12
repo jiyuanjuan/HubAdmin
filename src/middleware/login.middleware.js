@@ -53,18 +53,20 @@ const verifyAuth = async (ctx, next) => {
     }
 }
 
-const verifyPermission = async (ctx, next) => {
-    const { id } = ctx.user
-    const { momentId } = ctx.params
-    try {
-        const isPerimission = await authService.checkPatch(momentId, id)
-        if(!isPerimission) throw new Error('无效的perimisson')
-        next()
-    } catch (err) {
-        const error = new Error(errorType.UNAUTHPERIMISSION)
-        ctx.app.emit('error', error, ctx) 
+const verifyPermission = (tableName) => {
+    return async (ctx, next) => {
+        const { id } = ctx.user;
+        const key = Object.keys(ctx.params)[0];
+        const momentId = ctx.params[key];
+        try {
+            const isPerimission = await authService.checkPerimission(tableName, momentId, id)
+            if (!isPerimission) throw new Error('无效的perimisson')
+            next()
+        } catch (err) {
+            const error = new Error(errorType.UNAUTHPERIMISSION)
+            ctx.app.emit('error', error, ctx)
+        }
     }
-
 }
 
 module.exports = {

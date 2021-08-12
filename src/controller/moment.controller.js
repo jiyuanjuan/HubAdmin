@@ -34,4 +34,4 @@ class momentController {
         ctx.body = result
     }
 }
-module.exports = new momentController
+module.exports = new momentController()
